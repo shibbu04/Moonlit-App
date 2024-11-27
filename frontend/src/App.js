@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import { 
+  LucideGithub, 
+  Linkedin, 
+  Globe, 
+  ArrowRight,
+  Menu,
+  X 
+} from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 
@@ -13,6 +21,9 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Mobile responsive states
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // Socket connection
   useEffect(() => {
@@ -70,6 +81,17 @@ function App() {
     }
   };
 
+  // Leave room handler
+  const leaveRoom = () => {
+    if (socket) {
+      socket.emit('leave_room', username);
+      setIsLoggedIn(false);
+      setUsername('');
+      setMessages([]);
+      setUsers([]);
+    }
+  };
+
   // Socket event listeners
   useEffect(() => {
     if (!socket) return;
@@ -118,11 +140,45 @@ function App() {
               maxLength={20}
             />
             <button onClick={handleLogin}>
-              Start Chatting
+              Start Chatting <ArrowRight className="button-icon" />
             </button>
           </div>
-          <div className="login-footer">
-            <p>🌈 Connect. Communicate. Celebrate!</p>
+          
+          {/* Enhanced Social Footer */}
+          <div className="social-footer">
+            <div className="social-links">
+              <a 
+                href="https://github.com/shivams1208" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-link"
+              >
+                <LucideGithub strokeWidth={1.5} />
+                <span>GitHub</span>
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/shivam-sharma-3b184422a/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-link"
+              >
+                <Linkedin strokeWidth={1.5} />
+                <span>LinkedIn</span>
+              </a>
+              <a 
+                href="https://shivam-portfolio-v2.vercel.app/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="social-link"
+              >
+                <Globe strokeWidth={1.5} />
+                <span>Portfolio</span>
+              </a>
+            </div>
+            <div className="footer-tagline">
+              <p>Designed with ❤️ by Shivam</p>
+              <p>🌈 Connect. Communicate. Celebrate!</p>
+            </div>
           </div>
         </div>
       </div>
@@ -132,10 +188,30 @@ function App() {
   // Chat interface
   return (
     <div className="chat-container">
-      <div className="users-sidebar">
+      {/* Mobile Sidebar Toggle */}
+      <div className="mobile-header">
+        <button 
+          className="mobile-sidebar-toggle" 
+          onClick={() => setIsMobileSidebarOpen(true)}
+        >
+          <Menu />
+        </button>
+        <h2>Moonlit Chat</h2>
+      </div>
+      
+      <div className={`users-sidebar ${isMobileSidebarOpen ? 'mobile-sidebar-open' : ''}`}>
+        <button 
+          className="mobile-sidebar-close" 
+          onClick={() => setIsMobileSidebarOpen(false)}
+        >
+          <X />
+        </button>
         <div className="users-header">
           <h2>Active Connections</h2>
           <span className="user-count">{users.length}</span>
+        </div>
+        <div className="logged-in-user">
+          Logged in as: {username}
         </div>
         <div className="users-list">
           {users.map(user => (
@@ -145,6 +221,15 @@ function App() {
             </div>
           ))}
         </div>
+        <button 
+          className="leave-room-btn" 
+          onClick={() => {
+            leaveRoom();
+            setIsMobileSidebarOpen(false);
+          }}
+        >
+          Leave Room
+        </button>
       </div>
       
       <div className="chat-area">

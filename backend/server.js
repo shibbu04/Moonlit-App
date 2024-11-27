@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     if (!users.has(username)) {
       users.add(username);
       socket.username = username;
-      
+
       // Broadcast user joined message
       io.emit('user_update', {
         username: username,
@@ -40,6 +40,20 @@ io.on('connection', (socket) => {
       });
     } else {
       socket.emit('username_error', 'Username already exists');
+    }
+  });
+
+  // Handle user manually leaving room
+  socket.on('leave_room', (username) => {
+    if (users.has(username)) {
+      users.delete(username);
+      
+      // Broadcast user left message
+      io.emit('user_update', {
+        username: username,
+        action: 'leave',
+        users: Array.from(users)
+      });
     }
   });
 
@@ -53,7 +67,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if (socket.username) {
       users.delete(socket.username);
-      
+
       // Broadcast user left message
       io.emit('user_update', {
         username: socket.username,
