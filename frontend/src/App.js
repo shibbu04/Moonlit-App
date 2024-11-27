@@ -148,7 +148,7 @@ function App() {
           <div className="social-footer">
             <div className="social-links">
               <a 
-                href="https://github.com/shivams1208" 
+                href="https://github.com/shibbu04/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="social-link"
@@ -157,7 +157,7 @@ function App() {
                 <span>GitHub</span>
               </a>
               <a 
-                href="https://www.linkedin.com/in/shivam-sharma-3b184422a/" 
+                href="https://www.linkedin.com/in/shivamsingh57680/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="social-link"
@@ -166,7 +166,7 @@ function App() {
                 <span>LinkedIn</span>
               </a>
               <a 
-                href="https://shivam-portfolio-v2.vercel.app/" 
+                href="https://shivam04.tech/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="social-link"
