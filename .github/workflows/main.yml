@@ -1,0 +1,15 @@
+name: Keep Render Service Alive
+
+# Schedule the workflow to run every 10 minutes
+on:
+  schedule:
+    - cron: "*/10 * * * *" # Runs every 10 minutes in UTC
+
+jobs:
+  ping_render_service:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Use curl to send an HTTP GET request to your Render URL
+      - name: Send Ping to Render Service
+        run: curl -X GET https://moonlit-app.onrender.com/api/health
